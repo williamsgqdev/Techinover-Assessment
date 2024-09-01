@@ -1,4 +1,11 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 export enum Role {
   user = 'user',
   admin = 'admin',
@@ -32,6 +39,20 @@ export class User {
     type: 'enum',
     enum: Role,
     nullable: false,
+    default: Role.user,
   })
   role: Role;
+
+  @Column({
+    type: 'boolean',
+    nullable: false,
+    default: true,
+  })
+  active: boolean;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
