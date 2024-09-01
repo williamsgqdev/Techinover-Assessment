@@ -2,10 +2,15 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
+import { User } from 'src/users/entities/user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
   async signup(signupDto: SignupDto) {
     const { email, password, name } = signupDto;
     /**
@@ -25,6 +30,26 @@ export class AuthService {
 
     return {
       message: 'Account created successfully, Kindly login',
+    };
+  }
+
+  async validateUser(email: string, password: string) {
+    const user = await this.usersService.findOne(email);
+    if (user && bcrypt.compareSync(password, user.password)) return user;
+    return null;
+  }
+
+  async login(user: User) {
+    delete user.password;
+    return {
+      message: 'LoggedIn Successfully',
+      data: {
+        access_token: this.jwtService.sign({
+          sub: user.id,
+          email: user.email,
+        }),
+        user,
+      },
     };
   }
 }
