@@ -9,7 +9,7 @@ import {
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignupDto, SignupResponseDto } from './dto/signup.dto';
-import { LocalAuthGuard } from './guards/local.gurad';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoginDto } from './dto/login.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';

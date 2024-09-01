@@ -4,6 +4,7 @@ import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { ITokenPayload } from 'src/interfaces/token-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -41,15 +42,21 @@ export class AuthService {
 
   async login(user: User) {
     delete user.password;
+    const payload: ITokenPayload = {
+      sub: user.id,
+      email: user.email,
+    };
     return {
       message: 'LoggedIn Successfully',
       data: {
-        access_token: this.jwtService.sign({
-          sub: user.id,
-          email: user.email,
-        }),
+        access_token: this.jwtService.sign(payload),
         user,
       },
     };
+  }
+
+  async validateUserFromToken(payload: ITokenPayload) {
+    const user = await this.usersService.findOneTokenProperties(payload);
+    return user;
   }
 }
