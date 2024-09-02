@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -81,9 +82,7 @@ export class ProductsService {
     );
 
     if (!update.affected)
-      throw new InternalServerErrorException(
-        'Oops something went wrong, Try again',
-      );
+      throw new BadRequestException('No record was updated');
     const { data: product } = await this.viewProduct(user, id);
 
     return {
@@ -108,6 +107,34 @@ export class ProductsService {
 
     return {
       message: 'Product deleted sucessfully',
+    };
+  }
+
+  async toggleApproval(id: string) {
+    const product = await this.productRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!product) throw new NotFoundException('Product not found');
+
+    const update = await this.productRepository.update(
+      {
+        id: product.id,
+      },
+      {
+        approved: !product.approved,
+      },
+    );
+
+    if (!update.affected)
+      throw new InternalServerErrorException(
+        'Oops something went wrong, Try again',
+      );
+    return {
+      message: `product has been ${!product.approved ? 'approved' : 'unapproved'} `,
+      data: { ...product, approved: !product.approved },
     };
   }
 }

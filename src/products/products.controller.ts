@@ -17,9 +17,10 @@ import {
   GetProductResponseDto,
   GetProductsResponseDto,
 } from './dto/create-product.dto';
-import { User } from 'src/users/entities/user.entity';
+import { Role, User } from 'src/users/entities/user.entity';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { MessageOnlyResponse } from 'src/auth/dto/signup.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('products')
 @ApiTags('Products')
@@ -82,5 +83,16 @@ export class ProductsController {
   @Delete(':id')
   deleteProduct(@CurrentUser() user: User, @Param('id') id: string) {
     return this.productService.deleteProduct(user, id);
+  }
+
+  @Roles(Role.admin)
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetProductResponseDto,
+  })
+  @Patch('/toggle-approval/:id')
+  toggleApproval(@Param('id') id: string) {
+    return this.productService.toggleApproval(id);
   }
 }
