@@ -14,6 +14,7 @@ import { LoginDto, LoginResponseDto } from './dto/login.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { Public } from './decorators/public.decorator';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -35,6 +36,7 @@ export class AuthController {
   /**
    * Login
    */
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Public()
   @ApiBody({
     type: LoginDto,
