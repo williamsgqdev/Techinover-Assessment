@@ -12,6 +12,6 @@ export class GetUserResponseDto {
   @ApiProperty()
   message: string;
 
-  @ApiProperty({ type: [UserDataDto] })
-  data: UserDataDto[];
+  @ApiProperty({ type: UserDataDto })
+  data: UserDataDto;
 }
