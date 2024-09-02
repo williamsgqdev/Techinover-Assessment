@@ -6,8 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ITokenPayload } from 'src/interfaces/token-payload.interface';
 import { AuthService } from '../auth.service';
+import { ITokenPayload } from '../interfaces/token.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

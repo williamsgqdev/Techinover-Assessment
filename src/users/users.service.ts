@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role, User } from './entities/user.entity';
-import { ITokenPayload } from 'src/interfaces/token-payload.interface';
+import { ITokenPayload } from 'src/auth/interfaces/token.interface';
 
 @Injectable()
 export class UsersService {
