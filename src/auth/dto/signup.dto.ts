@@ -27,7 +27,7 @@ export class SignupDto {
   password: string;
 }
 
-export class SignupResponseDto {
+export class MessageOnlyResponse {
   @ApiProperty()
   message: string;
 }

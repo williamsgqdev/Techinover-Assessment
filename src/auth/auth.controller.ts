@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { SignupDto, SignupResponseDto } from './dto/signup.dto';
+import { MessageOnlyResponse, SignupDto } from './dto/signup.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoginDto, LoginResponseDto } from './dto/login.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
@@ -27,7 +27,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    type: SignupResponseDto,
+    type: MessageOnlyResponse,
   })
   signup(@Body() signupDto: SignupDto) {
     return this.authService.signup(signupDto);

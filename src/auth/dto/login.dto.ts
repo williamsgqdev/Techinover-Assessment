@@ -22,6 +22,12 @@ export class UserDataDto {
 
   @ApiProperty({ type: Boolean })
   active: boolean;
+
+  @ApiProperty()
+  created_at: string;
+
+  @ApiProperty()
+  updated_at: string;
 }
 
 class ResponseDataDto {

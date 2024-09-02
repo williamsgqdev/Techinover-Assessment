@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -41,7 +46,7 @@ export class ProductsService {
   }
 
   async viewProduct(user: User, id: string) {
-    const product = await this.productRepository.find({
+    const product = await this.productRepository.findOne({
       where: {
         id,
         user: {
@@ -55,6 +60,54 @@ export class ProductsService {
     return {
       message: 'Product fetched successfully',
       data: product,
+    };
+  }
+
+  async updateProduct(
+    user: User,
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ) {
+    await this.viewProduct(user, id);
+
+    const update = await this.productRepository.update(
+      {
+        id,
+        user: {
+          id: user.id,
+        },
+      },
+      updateProductDto,
+    );
+
+    if (!update.affected)
+      throw new InternalServerErrorException(
+        'Oops something went wrong, Try again',
+      );
+    const { data: product } = await this.viewProduct(user, id);
+
+    return {
+      message: 'Product updated sucessfully',
+      data: product,
+    };
+  }
+
+  async deleteProduct(user: User, id: string) {
+    await this.viewProduct(user, id);
+    const op = await this.productRepository.delete({
+      id,
+      user: {
+        id: user.id,
+      },
+    });
+
+    if (!op.affected)
+      throw new InternalServerErrorException(
+        'Oops something went wrong, Try again',
+      );
+
+    return {
+      message: 'Product deleted sucessfully',
     };
   }
 }

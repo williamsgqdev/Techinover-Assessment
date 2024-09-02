@@ -1,4 +1,11 @@
-import { Controller, Get, HttpStatus, Param, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -33,6 +40,7 @@ export class UsersController {
 
   @Roles(Role.admin)
   @Patch('/toggle-ban/:id')
+  @HttpCode(HttpStatus.OK)
   @ApiResponse({
     type: GetUserResponseDto,
     status: HttpStatus.OK,
