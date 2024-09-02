@@ -13,6 +13,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoginDto } from './dto/login.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -21,6 +22,7 @@ export class AuthController {
   /**
    * Signup
    */
+  @Public()
   @Post('/signup')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -33,6 +35,7 @@ export class AuthController {
   /**
    * Login
    */
+  @Public()
   @ApiBody({
     type: LoginDto,
   })
