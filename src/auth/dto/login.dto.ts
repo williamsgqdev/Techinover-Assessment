@@ -7,7 +7,7 @@ export class LoginDto {
   password: string;
 }
 
-class UserDataDto {
+export class UserDataDto {
   @ApiProperty()
   id: string;
 

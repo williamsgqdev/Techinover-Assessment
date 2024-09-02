@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { Role, User } from './entities/user.entity';
 import { ITokenPayload } from 'src/interfaces/token-payload.interface';
 
 @Injectable()
@@ -36,5 +40,63 @@ export class UsersService {
     });
 
     return user;
+  }
+
+  async getUsers() {
+    const users = await this.usersRepository.find({
+      where: {
+        role: Role.user,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
+    return {
+      message: 'users retrieved ssuccessfully',
+      data: users,
+    };
+  }
+
+  async getUser(id: string) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        role: Role.user,
+        id,
+      },
+    });
+
+    if (!user) throw new NotFoundException('user not found');
+
+    return {
+      message: 'user retrieved ssuccessfully',
+      data: user,
+    };
+  }
+
+  async toggleBan(id: string) {
+    const { data: user } = await this.getUser(id);
+    const update = await this.usersRepository.update(
+      {
+        id,
+      },
+      {
+        active: !user.active,
+      },
+    );
+
+    if (!update.affected)
+      throw new InternalServerErrorException(
+        'Oops something went wrong, Try again',
+      );
+
+    return {
+      message: `user has been ${!user.active ? 'unbanned' : 'banned'} `,
+      data: { ...user, active: !user.active },
+    };
   }
 }

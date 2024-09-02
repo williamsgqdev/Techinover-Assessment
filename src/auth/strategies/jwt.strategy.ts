@@ -1,6 +1,10 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ITokenPayload } from 'src/interfaces/token-payload.interface';
 import { AuthService } from '../auth.service';
@@ -21,6 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: ITokenPayload) {
     const user = await this.authService.validateUserFromToken(payload);
     if (!user) throw new UnauthorizedException('Invalid Session');
+    if (!user.active) throw new ForbiddenException('user has been banned');
     return user;
   }
 }
