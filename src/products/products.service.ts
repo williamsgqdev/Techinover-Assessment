@@ -137,4 +137,17 @@ export class ProductsService {
       data: { ...product, approved: !product.approved },
     };
   }
+
+  async fetchProduct() {
+    const products = await this.productRepository.find({
+      where: {
+        approved: true,
+      },
+    });
+
+    return {
+      message: 'Products fetched successfully',
+      data: products,
+    };
+  }
 }

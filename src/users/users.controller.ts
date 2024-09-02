@@ -19,7 +19,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Roles(Role.admin)
-  @Get('/')
+  @Get('/admin')
   @ApiResponse({
     type: GetUsersResponseDto,
     status: HttpStatus.OK,
@@ -29,7 +29,7 @@ export class UsersController {
   }
 
   @Roles(Role.admin)
-  @Get(':id')
+  @Get('/admin/:id')
   @ApiResponse({
     type: GetUserResponseDto,
     status: HttpStatus.OK,
@@ -39,7 +39,7 @@ export class UsersController {
   }
 
   @Roles(Role.admin)
-  @Patch('/toggle-ban/:id')
+  @Patch('/admin/toggle-ban/:id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     type: GetUserResponseDto,

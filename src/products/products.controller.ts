@@ -21,18 +21,29 @@ import { Role, User } from 'src/users/entities/user.entity';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { MessageOnlyResponse } from 'src/auth/dto/signup.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('products')
 @ApiTags('Products')
 export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetProductsResponseDto,
+  })
+  @Public()
+  @Get('/public')
+  fetchProduct() {
+    return this.productService.fetchProduct();
+  }
+
   @ApiBearerAuth()
   @ApiResponse({
     status: HttpStatus.CREATED,
     type: GetProductResponseDto,
   })
-  @Post('/')
+  @Post('/manage')
   createProduct(
     @CurrentUser() user: User,
     @Body() createProductDto: CreateProductDto,
@@ -45,7 +56,7 @@ export class ProductsController {
     status: HttpStatus.OK,
     type: GetProductsResponseDto,
   })
-  @Get('/')
+  @Get('/manage')
   viewProducts(@CurrentUser() user: User) {
     return this.productService.viewProducts(user);
   }
@@ -55,7 +66,7 @@ export class ProductsController {
     status: HttpStatus.OK,
     type: GetProductResponseDto,
   })
-  @Get(':id')
+  @Get('/manage/:id')
   viewProduct(@CurrentUser() user: User, @Param('id') id: string) {
     return this.productService.viewProduct(user, id);
   }
@@ -65,7 +76,7 @@ export class ProductsController {
     status: HttpStatus.OK,
     type: GetProductResponseDto,
   })
-  @Patch(':id')
+  @Patch('/manage/:id')
   @HttpCode(HttpStatus.OK)
   updateProduct(
     @CurrentUser() user: User,
@@ -80,7 +91,7 @@ export class ProductsController {
     status: HttpStatus.OK,
     type: MessageOnlyResponse,
   })
-  @Delete(':id')
+  @Delete('/manage/:id')
   deleteProduct(@CurrentUser() user: User, @Param('id') id: string) {
     return this.productService.deleteProduct(user, id);
   }
@@ -91,7 +102,7 @@ export class ProductsController {
     status: HttpStatus.OK,
     type: GetProductResponseDto,
   })
-  @Patch('/toggle-approval/:id')
+  @Patch('/admin/toggle-approval/:id')
   toggleApproval(@Param('id') id: string) {
     return this.productService.toggleApproval(id);
   }
