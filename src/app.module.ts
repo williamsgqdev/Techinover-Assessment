@@ -22,7 +22,6 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
         DB_USER: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
-        DB_SYNCHRONIZE: Joi.boolean().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -34,7 +33,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
         password: configService.getOrThrow<string>('DB_PASSWORD'),
         database: configService.getOrThrow<string>('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: configService.getOrThrow('DB_SYNCHRONIZE'),
+        synchronize: true,
         logging: true,
       }),
       inject: [ConfigService],
