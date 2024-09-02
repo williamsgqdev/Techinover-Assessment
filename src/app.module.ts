@@ -34,7 +34,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
         database: configService.getOrThrow<string>('DB_NAME'),
         autoLoadEntities: true,
         synchronize: true,
-        logging: true,
+        logging: false,
       }),
       inject: [ConfigService],
     }),
