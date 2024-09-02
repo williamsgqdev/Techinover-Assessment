@@ -9,7 +9,7 @@ Simple e-commerce system api for products and users management.
 
 1. Clone this project locally .
 
-2. Create and fill in `.env` file:
+2.  Create .env file and add :
 ``` 
 PORT=3000
 DB_HOST=localhost
@@ -23,9 +23,7 @@ JWT_SECRET=test
 
 3. Run `npm install`.
 
-4. Run `npm run migration:run`
-
-5. Run `npm run start:dev`.
+4. Run `npm run start:dev`.
 
 ## Running project using docker-compose
 
