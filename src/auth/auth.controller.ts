@@ -10,7 +10,7 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignupDto, SignupResponseDto } from './dto/signup.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto, LoginResponseDto } from './dto/login.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { Public } from './decorators/public.decorator';
@@ -38,6 +38,10 @@ export class AuthController {
   @Public()
   @ApiBody({
     type: LoginDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: LoginResponseDto,
   })
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
