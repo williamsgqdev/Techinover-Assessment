@@ -20,6 +20,7 @@ DB_NAME=techinoverDb
 JWT_SECRET=test
 
 ```
+NOTE: use your own Database credentials
 
 3. Run `npm install`.
 
